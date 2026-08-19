@@ -2,9 +2,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = process.env.PORT;
-const MONGODB_URL = process.env.MONGODB_URL;
-const DBNAME = process.env.DBNAME;
-const env = { PORT, MONGODB_URL, DBNAME };
+export const env = {
+    port: process.env.PORT,
+    mongoURL: process.env.MONGODB_URL || process.env.MONGODB_URI,
+    dbName: process.env.MONGO_DB_NAME || process.env.DBNAME,
+    jwtSecret: process.env.JWT_SECRET,
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1h',
+};
 
 export default env;

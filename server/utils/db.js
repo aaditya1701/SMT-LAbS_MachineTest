@@ -1,15 +1,18 @@
-import mongoose from 'mongoose';
-import env from './env.js';
+import mongoose from "mongoose";
+import { env } from "./env.js";
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(env.MONGODB_URL, {
-      dbName: env.DBNAME
-    });
-    console.log('MongoDB connected');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    process.exit(1);
-  }
+const clientOptions = {
+    serverApi: { version: "1", strict: true, deprecationErrors: true },
+    dbName: env.dbName,
 };
-export default connectDB;
+
+export default async function connectDb() {
+    try {
+        await mongoose.connect(env.mongoURL, clientOptions);
+        await mongoose.connection.db.admin().command({ ping: 1 });
+        console.log(`MongoDB connected successfully: ${mongoose.connection.name}`);
+    } catch (err) {
+        console.error("MongoDB connection failed:");
+        throw err;
+    }
+}
